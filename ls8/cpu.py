@@ -7,9 +7,15 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
+        self.HLT = 0b00000001
+        self.LDI = 0b10000010
+        self.PRN = 0b01000111
+
+
         # 256 = 0b100000000
         self.ram = [0] * 8
-        self.reg = []
+        self.reg = [0] * 8
+        self.pc = 0
 
 
     def load(self):
@@ -79,7 +85,28 @@ class CPU:
         self.ram[mar] = mdr
 
 
+    def raw_ram_print(self):
+        for instruction in self.ram:
+            if instruction == self.HLT:
+                return
+            else:
+                print(instruction)
+
     def run(self):
         """Run the CPU."""
-        pass
+        
+        address = self.ram[self.pc]
+        self.pc += 1
+        while self.HLT:
+            if address == self.HLT:
+                self.HLT = 0
+            elif address == self.LDI:
+                pass
+            elif address == self.PRN:
+                pass
 
+            self.pc += 1
+
+
+c = CPU()
+c.raw_ram_print()
