@@ -24,16 +24,19 @@ class CPU:
         address = 0
 
         # For now, we've just hardcoded a program:
+        program = []
+        program_name = sys.argv[1]
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+        with open(program_name) as f:
+            for line in f:
+                line = line.split("#")[0]
+                line = line.strip()
+                if line == '':
+                    continue
+                val = int(line)
+                print(val)
+
+        sys.exit(0)
 
         for instruction in program:
             self.ram[address] = instruction
@@ -95,19 +98,17 @@ class CPU:
     def run(self):
         """Run the CPU."""
 
-        while self.HLT != 0:
+        # while self.HLT != 0:
 
-            address = self.ram_read(self.pc)
-            print(address, self.pc)
-            if address == self.HLT:
-                self.HLT = 0
-            elif address == self.LDI:
-                self.pc + 1
-            elif address == self.PRN:
-                self.pc += 1
+        #     address = self.ram_read(self.pc)
+        #     print(address, self.pc)
+        #     if address == self.HLT:
+        #         self.HLT = 0
+        #     elif address == self.LDI:
+        #         self.pc + 1
+        #     elif address == self.PRN:
+        #         self.pc += 1
 
-            self.pc += 1
+        #     self.pc += 1
+        pass
 
-
-c = CPU()
-c.run()
