@@ -13,7 +13,7 @@ class CPU:
 
 
         # 256 = 0b100000000
-        self.ram = [0] * 8
+        self.ram = [0] * 256
         self.reg = [0] * 8
         self.pc = 0
 
@@ -74,7 +74,7 @@ class CPU:
         should accept the address to read and return the value stored there.
         """
         value = self.ram[mar]
-
+        print(value)
         return value
 
     
@@ -94,19 +94,20 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        
-        address = self.ram[self.pc]
-        self.pc += 1
-        while self.HLT:
+
+        while self.HLT != 0:
+
+            address = self.ram_read(self.pc)
+            print(address, self.pc)
             if address == self.HLT:
                 self.HLT = 0
             elif address == self.LDI:
-                pass
+                self.pc + 1
             elif address == self.PRN:
-                pass
+                self.pc += 1
 
             self.pc += 1
 
 
 c = CPU()
-c.raw_ram_print()
+c.run()
