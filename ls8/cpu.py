@@ -3,9 +3,10 @@
 #https://github.com/hectorsvill/Computer-Architecture/blob/master/LS8-spec.md
 
 import sys
-LDI = 130 # 0b10000010   # 130 
-PRN = 71 # 0b01000111   # 71
-HLT = 1 # 0b00000001   # 1
+LDI = 130 # 0b10000010 
+PRN = 71 # 0b01000111 
+HLT = 1 # 0b00000001 
+MUL = 162 # 10100010
 
 class CPU:
     """Main CPU class."""
@@ -15,8 +16,8 @@ class CPU:
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
         self.pc = 0 # Program Counter, address of the currently executing instruction
-        self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
-        self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
+        #self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
+        #self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
     def load(self):
         """Load a program into memory."""
         if len(sys.argv) != 2:
@@ -88,6 +89,8 @@ class CPU:
         '''
         value = self.reg[reg_a]
         print(value)
+    def mul(self):
+        pass
     def run(self):
         '''
         run cpu
