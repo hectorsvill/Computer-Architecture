@@ -49,7 +49,6 @@ class CPU:
         Handy function to print out the CPU state. You might want to call this
         from run() if you need help debugging.
         """
-
         print(f"TRACE: %02X | %02X %02X %02X |" % (
             self.pc,
             #self.fl,
@@ -63,13 +62,11 @@ class CPU:
             print(" %02X" % self.reg[i], end='')
 
         print()
-
     def ram_read(self, reg_a):
         """
         should accept the address to read and return the value stored there.
         """
         return self.ram[reg_a]
-
     def raw_write(self, reg_a, reg_b):
         """
         Should accept a value to write, and the address to write it to.
@@ -101,11 +98,12 @@ class CPU:
             
             if instruction == HLT:
                 self.hlt()
+            elif instruction == LDI:
+                self.ldi()
+            elif instruction == PRN:
+                self.prn()
 
             self.pc += 1
-            
-
-
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
