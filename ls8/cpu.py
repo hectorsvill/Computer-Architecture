@@ -4,21 +4,29 @@
 
 import sys
 
-LDI = 130 # 0b10000010 
-PRN = 71 # 0b01000111 
-HLT = 1 # 0b00000001 
-MUL = 162 # 10100010
+LDI = 0b10000010 # 120
+PRN = 0b01000111  # 71
+HLT = 0b00000001 # 1
+MUL = 0b10100010 # 162 
 
 class CPU:
     """Main CPU class."""
     def __init__(self):
         """Construct a new CPU."""
+        self.dt = {} # dispatch table
         self.halted = False
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
         self.pc = 0 # Program Counter, address of the currently executing instruction
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
+    def create_dispatch_table(self):
+        self.dt = {
+            LDI: self.ldi,
+            PRN: self.prn,
+            HLT: self.hlt,
+            MUL: self.mul,
+        }
     def load(self):
         """Load a program into memory."""
         if len(sys.argv) != 2:
@@ -114,20 +122,18 @@ class CPU:
         while not self.halted:
             instruction = self.ram_read(self.pc)
             self.register()
+            self.dt[instruction]()
             # print(instruction)
-            if instruction == HLT:
-                self.hlt()
-            elif instruction == LDI:
-                self.ldi()
-                # self.pc += 3
-            elif instruction == PRN:
-                self.prn()
-                # self.pc += 2
-            elif instruction == MUL:
-                self.mul()
-                # self.pc += 3
-            else:
-                pass
+            # if instruction == HLT:
+            #     self.hlt()
+            # elif instruction == LDI:
+            #     # self.ldi()
+            # elif instruction == PRN:
+            #     self.prn()
+            # elif instruction == MUL:
+            #     self.mul()
+            # else:
+            #     pass
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
