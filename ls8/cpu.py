@@ -1,21 +1,22 @@
 """CPU functionality."""
 
+#https://github.com/hectorsvill/Computer-Architecture/blob/master/LS8-spec.md
+
 import sys
 LDI = 0b10000010   # 130 
 PRN = 0b01000111   # 71
 HLT = 0b00000001   # 1
-LD = 0b010001010
-
-
 
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        self.ram = [0] * 256
-        self.register = [0] * 8
-        self.pc = 0
+        self.ram = [0] * 256 # ram of 256 bytes
+        self.reg = [0] * 8 # register
+        self.pc = 0 # Program Counter, address of the currently executing instruction
+        self.mar =  0 #  Memory Address Register, holds the memory address we're reading or writing
+        self.mdr = 0 # Memory Data Register, holds the value to write or the value just read
 
 
     def load(self):
@@ -99,7 +100,7 @@ class CPU:
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
         pass
-    
+
     def hlt(self):
         '''
         halt the CPU and exit the emulator.
