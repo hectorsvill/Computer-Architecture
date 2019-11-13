@@ -20,7 +20,6 @@ class CPU:
         """Construct a new CPU."""
         self.dispatch_table = self.create_dispatch_table() # dispatch table 0(1) # branch table
         self.halted = False # program is running 
-        
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
 
@@ -133,6 +132,8 @@ class CPU:
         Push the value in the given register on the stack. Decrement the SP.
         Copy the value in the given register to the address pointed to by SP.
         '''
+        self.reg[7] -= 1
+        self.ram[self.reg[7]] = self.reg[self.reg_a]
         self.pc += 2
     def pop(self):
         self.pc += 2
