@@ -136,6 +136,13 @@ class CPU:
         self.ram[self.reg[7]] = self.reg[self.reg_a]
         self.pc += 2
     def pop(self):
+        '''
+        Pop the value at the top of the stack into the given register. Copy the
+        value from the address pointed to by SP to the given register. Increment SP.
+        '''
+        value = self.ram[self.reg[7]]
+        self.reg[7] += 1
+        self.reg[self.reg_a] = value
         self.pc += 2
     def run(self):
         '''
