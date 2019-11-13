@@ -4,22 +4,31 @@
 
 import sys
 
-LDI = 0b10000010 # 120
-PRN = 0b01000111  # 71
-HLT = 0b00000001 # 1
-MUL = 0b10100010 # 162 
+LDI = 0X82 # 130
+PRN = 0X47  # 71
+HLT = 0X01 # 1
+MUL = 0XA2 # 162 
+PUSH = 0X45 # 69
+POP =  0X46 #70
+
+
+PO = 0XF4 # empty stack address
 
 class CPU:
     """Main CPU class."""
     def __init__(self):
         """Construct a new CPU."""
-        self.dispatch_table = self.create_dispatch_table() # dispatch table
-        self.halted = False
+        self.dispatch_table = self.create_dispatch_table() # dispatch table 0(1) # branch table
+        self.halted = False # program is running 
+        
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
+
         self.pc = 0 # Program Counter, address of the currently executing instruction
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
+        self.ar = 0 # Instruction Register, contains a copy of the currently executing instruction
+        self.reg[7] = PO # at address F4, if the stack is empty
     def create_dispatch_table(self):
         '''
         Create a dispatch table for faster access
@@ -29,6 +38,8 @@ class CPU:
             PRN: self.prn,
             HLT: self.hlt,
             MUL: self.mul,
+            PUSH: self.push,
+            POP: self.pop,
         }
         return dispatch_table
     def load(self):
@@ -117,14 +128,22 @@ class CPU:
         halt the CPU and exit the emulator.
         '''
         self.halted = True
+    def push(self):
+        '''
+        Push the value in the given register on the stack. Decrement the SP.
+        Copy the value in the given register to the address pointed to by SP.
+        '''
+        self.pc += 2
+    def pop(self):
+        self.pc += 2
     def run(self):
         '''
         run cpu
         '''
         while not self.halted:
-            instruction = self.ram_read(self.pc)
+            self.ir = self.ram_read(self.pc)
             self.register()
-            self.dispatch_table[instruction]()
+            self.dispatch_table[self.ir]()
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
