@@ -16,8 +16,8 @@ class CPU:
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
         self.pc = 0 # Program Counter, address of the currently executing instruction
-        #self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
-        #self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
+        self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
+        self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
     def load(self):
         """Load a program into memory."""
         if len(sys.argv) != 2:
@@ -78,17 +78,16 @@ class CPU:
         halt the CPU and exit the emulator.
         '''
         self.halted = True
-    def ldi(self, reg_a, reg_b):
+    def ldi(self):
         '''
         load "immediate", store a value in a register, or "set this register to this value".
         '''
-        self.reg[reg_a] = reg_b
-    def prn(self, reg_a):
+        self.reg[self.reg_a] = self.reg_b
+    def prn(self):
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
-        value = self.reg[reg_a]
-        print(value)
+        print(self.reg[self.reg_a])
     def mul(self):
         '''
         Multiply the values in two registers together and store the result in registerA. Machine code:
@@ -101,16 +100,16 @@ class CPU:
         # i = 0
         while not self.halted:
             instruction = self.ram_read(self.pc)
-            reg_a = self.ram_read(self.pc + 1)
-            reg_b = self.ram_read(self.pc + 2)
+            self.reg_a = self.ram_read(self.pc + 1)
+            self.reg_b = self.ram_read(self.pc + 2)
             
             # print(instruction)
             if instruction == HLT:
                 self.hlt()
             elif instruction == LDI:
-                self.ldi(reg_a, reg_b)
+                self.ldi()
             elif instruction == PRN:
-                self.prn(reg_a)
+                self.prn()
             else:
                 pass
                 # print(f"found nothing at: {instruction}")    
