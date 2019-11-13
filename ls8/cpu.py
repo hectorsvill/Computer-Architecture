@@ -11,7 +11,7 @@ class CPU:
     """Main CPU class."""
     def __init__(self):
         """Construct a new CPU."""
-        self.run = True
+        self.halted = False
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
         self.pc = 0 # Program Counter, address of the currently executing instruction
@@ -92,9 +92,12 @@ class CPU:
         '''
         print(self.reg[self.pc + 1])
         self.pc + 2
+    def run(self):
+        print(self.halted)
 
 
-cpu = CPU()
-cpu.load()
-cpu.run()
-print("here")
+if __name__ == "__main__":
+    cpu = CPU()
+    cpu.load()
+    cpu.run()
+    print("here")
