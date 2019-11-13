@@ -58,10 +58,8 @@ class CPU:
             self.ram_read(self.pc + 1),
             self.ram_read(self.pc + 2)
         ), end='')
-
         for i in range(8):
             print(" %02X" % self.reg[i], end='')
-
         print()
     def ram_read(self, reg_a):
         """
@@ -73,16 +71,13 @@ class CPU:
         Should accept a value to write, and the address to write it to.
         """
         self.ram[reg_a] = reg_b
-    def hlt(self):
-        '''
-        halt the CPU and exit the emulator.
-        '''
-        self.halted = True
+    def reg_write(self, reg_a, reg_b):
+        self.reg[reg_a] = reg_b
     def ldi(self):
         '''
         load "immediate", store a value in a register, or "set this register to this value".
         '''
-        self.reg[self.reg_a] = self.reg_b
+        self.reg_write(self.reg_a, self.reg_b)
     def prn(self):
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
@@ -92,7 +87,13 @@ class CPU:
         '''
         Multiply the values in two registers together and store the result in registerA. Machine code:
         '''
-        pass
+        result = self.reg[self.reg_a] * self.reg[self.reg_b]
+        self.reg_write(self.reg_a, result)
+    def hlt(self):
+        '''
+        halt the CPU and exit the emulator.
+        '''
+        self.halted = True
     def run(self):
         '''
         run cpu
@@ -108,13 +109,18 @@ class CPU:
                 self.hlt()
             elif instruction == LDI:
                 self.ldi()
+                self.pc += 3
             elif instruction == PRN:
                 self.prn()
+                self.pc += 2
+            elif instruction == MUL:
+                self.mul()
+                self.pc += 3
             else:
                 pass
                 # print(f"found nothing at: {instruction}")    
             
-            self.pc += 1
+            # self.pc += 1
 
             # if i == 14:
             #     break
