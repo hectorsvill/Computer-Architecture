@@ -9,16 +9,14 @@ HLT = 0b00000001   # 1
 
 class CPU:
     """Main CPU class."""
-
     def __init__(self):
         """Construct a new CPU."""
+        self.run = True
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
         self.pc = 0 # Program Counter, address of the currently executing instruction
-        self.mar =  0 #  Memory Address Register, holds the memory address we're reading or writing
-        self.mdr = 0 # Memory Data Register, holds the value to write or the value just read
-
-
+        self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
+        self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
     def load(self):
         """Load a program into memory."""
         if len(sys.argv) != 2:
@@ -37,7 +35,6 @@ class CPU:
                     self.ram[address] = val
                     address += 1
             sys.exit(0)
-
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -46,7 +43,6 @@ class CPU:
         #elif op == "SUB": etc
         else:
             raise Exception("Unsupported ALU operation")
-
     def trace(self):
         """
         Handy function to print out the CPU state. You might want to call this
@@ -67,27 +63,45 @@ class CPU:
 
         print()
 
-    def ram_read(self, mar):
+    def ram_read(self, reg_a):
         """
         should accept the address to read and return the value stored there.
         """
-        value = self.ram[mar]
-        return value
+        return self.ram[reg_a]
 
-    
-    def raw_write(self, mdr, mar):
+    def raw_write(self, reg_a, reg_b):
         """
         Should accept a value to write, and the address to write it to.
         """
-        self.ram[mar] = mdr
+        self.ram[reg_a] = reg_b
 
+    def run(self): 
+        print("run")
 
-    # def raw_ram_print(self):
-    #     for instruction in self.ram:
-    #         if instruction == self.HLT:
-    #             return
-    #         else:
-    #             print(instruction)
+    # def run(self):
+        # '''
+        # Run the CPU.
+        # '''
+        print("here")
+        # while self.run:
+        #     address = self.ram_read(self.pc)
+        #     print(address, self.pc)
+        #     if address == HLT:
+        #         print("htl")
+        #         break
+        #     elif address == LDI:
+        #         print("ldi")
+        #         self.pc + 1
+        #     elif address == PRN:
+        #         print("prn")
+        #         self.pc += 1
+        #     self.pc += 1
+
+    def hlt(self):
+        '''
+        halt the CPU and exit the emulator.
+        '''
+        self.run = False
 
     def ldi(self):
         '''
@@ -101,23 +115,8 @@ class CPU:
         '''
         pass
 
-    def hlt(self):
-        '''
-        halt the CPU and exit the emulator.
-        '''
-        pass
 
-    def run(self):
-        """Run the CPU."""
-        while HLT != 0:
-            address = self.ram_read(self.pc)
-            print(address, self.pc)
-            if address == HLT:
-                break
-            elif address == LDI:
-                self.pc + 1
-            elif address == PRN:
-                self.pc += 1
-            self.pc += 1
-        # pass
-
+cpu = CPU()
+cpu.load()
+cpu.run()
+print("here")
