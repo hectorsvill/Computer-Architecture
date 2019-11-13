@@ -3,6 +3,7 @@
 #https://github.com/hectorsvill/Computer-Architecture/blob/master/LS8-spec.md
 
 import sys
+
 LDI = 130 # 0b10000010 
 PRN = 71 # 0b01000111 
 HLT = 1 # 0b00000001 
@@ -87,17 +88,20 @@ class CPU:
         load "immediate", store a value in a register, or "set this register to this value".
         '''
         self.reg_write(self.reg_a, self.reg_b)
+        self.pc += 3
     def prn(self):
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
         print(self.reg[self.reg_a])
+        self.pc += 2
     def mul(self):
         '''
         Multiply the values in two registers together and store the result in registerA. Machine code:
         '''
         result = self.reg[self.reg_a] * self.reg[self.reg_b]
         self.reg_write(self.reg_a, result)
+        self.pc += 3
     def hlt(self):
         '''
         halt the CPU and exit the emulator.
@@ -115,13 +119,13 @@ class CPU:
                 self.hlt()
             elif instruction == LDI:
                 self.ldi()
-                self.pc += 3
+                # self.pc += 3
             elif instruction == PRN:
                 self.prn()
-                self.pc += 2
+                # self.pc += 2
             elif instruction == MUL:
                 self.mul()
-                self.pc += 3
+                # self.pc += 3
             else:
                 pass
 if __name__ == "__main__":
