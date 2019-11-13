@@ -92,14 +92,13 @@ class CPU:
         '''
         run cpu
         '''
-        i = 0
+        # i = 0
         while not self.halted:
             instruction = self.ram_read(self.pc)
             reg_a = self.ram_read(self.pc + 1)
             reg_b = self.ram_read(self.pc + 2)
             
             # print(instruction)
-
             if instruction == HLT:
                 self.hlt()
             elif instruction == LDI:
@@ -112,9 +111,9 @@ class CPU:
             
             self.pc += 1
 
-            if i == 14:
-                break
-            i += 1
+            # if i == 14:
+            #     break
+            # i += 1
 
 if __name__ == "__main__":
     cpu = CPU()
