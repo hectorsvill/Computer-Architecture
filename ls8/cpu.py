@@ -13,7 +13,7 @@ class CPU:
     """Main CPU class."""
     def __init__(self):
         """Construct a new CPU."""
-        self.dt = {} # dispatch table
+        self.dispatch_table = self.create_dispatch_table() # dispatch table
         self.halted = False
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
@@ -21,12 +21,13 @@ class CPU:
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
     def create_dispatch_table(self):
-        self.dt = {
+        dispatch_table = {
             LDI: self.ldi,
             PRN: self.prn,
             HLT: self.hlt,
             MUL: self.mul,
         }
+        return dispatch_table
     def load(self):
         """Load a program into memory."""
         if len(sys.argv) != 2:
@@ -122,7 +123,8 @@ class CPU:
         while not self.halted:
             instruction = self.ram_read(self.pc)
             self.register()
-            self.dt[instruction]()
+            self.dispatch_table[instruction]()
+            # print(self.dispatch_table)
             # print(instruction)
             # if instruction == HLT:
             #     self.hlt()
