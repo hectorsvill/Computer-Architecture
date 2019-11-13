@@ -12,7 +12,7 @@ PUSH = 0X45 # 69
 POP =  0X46 #70
 
 
-PO = 0XF4 # empty stack address
+SP = 0XF4 # empty stack address
 
 class CPU:
     """Main CPU class."""
@@ -27,7 +27,7 @@ class CPU:
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
         self.ar = 0 # Instruction Register, contains a copy of the currently executing instruction
-        self.reg[7] = PO # at address F4, if the stack is empty
+        self.reg[7] = SP # stack pointer - at address F4, if the stack is empty
     def create_dispatch_table(self):
         '''
         Create a dispatch table for faster access
@@ -127,20 +127,26 @@ class CPU:
         halt the CPU and exit the emulator.
         '''
         self.halted = True
+    @property
+    def sp(self):
+        '''
+        get stack pointer
+        '''
+        return self.reg[7]
     def push(self):
         '''
         Push the value in the given register on the stack. Decrement the SP.
         Copy the value in the given register to the address pointed to by SP.
         '''
         self.reg[7] -= 1
-        self.ram[self.reg[7]] = self.reg[self.reg_a]
+        self.ram[self.sp] = self.reg[self.reg_a]
         self.pc += 2
     def pop(self):
         '''
         Pop the value at the top of the stack into the given register. Copy the
         value from the address pointed to by SP to the given register. Increment SP.
         '''
-        value = self.ram[self.reg[7]]
+        value = self.ram[self.sp]
         self.reg[7] += 1
         self.reg[self.reg_a] = value
         self.pc += 2
