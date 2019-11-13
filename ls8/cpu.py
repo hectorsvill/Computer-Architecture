@@ -98,12 +98,10 @@ class CPU:
         '''
         run cpu
         '''
-        # i = 0
         while not self.halted:
             instruction = self.ram_read(self.pc)
             self.reg_a = self.ram_read(self.pc + 1)
-            self.reg_b = self.ram_read(self.pc + 2)
-            
+            self.reg_b = self.ram_read(self.pc + 2) 
             # print(instruction)
             if instruction == HLT:
                 self.hlt()
@@ -118,14 +116,6 @@ class CPU:
                 self.pc += 3
             else:
                 pass
-                # print(f"found nothing at: {instruction}")    
-            
-            # self.pc += 1
-
-            # if i == 14:
-            #     break
-            # i += 1
-
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
