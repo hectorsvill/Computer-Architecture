@@ -3,9 +3,9 @@
 #https://github.com/hectorsvill/Computer-Architecture/blob/master/LS8-spec.md
 
 import sys
-LDI = 0b10000010   # 130 
-PRN = 0b01000111   # 71
-HLT = 0b00000001   # 1
+LDI = 130 # 0b10000010   # 130 
+PRN = 71 # 0b01000111   # 71
+HLT = 1 # 0b00000001   # 1
 
 class CPU:
     """Main CPU class."""
@@ -34,6 +34,8 @@ class CPU:
                     val = int(line, 2)
                     self.ram[address] = val
                     address += 1
+        #             print(val)
+        # sys.exit()
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -80,25 +82,24 @@ class CPU:
         load "immediate", store a value in a register, or "set this register to this value".
         '''
         self.reg[reg_a] = reg_b
-        self.pc += 3
     def prn(self, reg_a):
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
         value = self.reg[reg_a]
         print(value)
-        self.pc + 2
     def run(self):
         '''
         run cpu
         '''
+        i = 0
         while not self.halted:
             instruction = self.ram_read(self.pc)
-            print(instruction)
-            
             reg_a = self.ram_read(self.pc + 1)
             reg_b = self.ram_read(self.pc + 2)
             
+            # print(instruction)
+
             if instruction == HLT:
                 self.hlt()
             elif instruction == LDI:
@@ -106,7 +107,14 @@ class CPU:
             elif instruction == PRN:
                 self.prn(reg_a)
             else:
-                self.pc + 1
+                pass
+                # print(f"found nothing at: {instruction}")    
+            
+            self.pc += 1
+
+            if i == 14:
+                break
+            i += 1
 
 if __name__ == "__main__":
     cpu = CPU()
