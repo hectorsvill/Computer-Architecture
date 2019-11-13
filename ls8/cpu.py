@@ -72,7 +72,16 @@ class CPU:
         """
         self.ram[reg_a] = reg_b
     def reg_write(self, reg_a, reg_b):
+        '''
+        should accept a memmory address and memory data to registor 
+        '''
         self.reg[reg_a] = reg_b
+    def register(self):
+        '''
+        Register data in next two memory addresses
+        '''
+        self.reg_a = self.ram[self.pc + 1]
+        self.reg_b = self.ram[self.pc + 2]
     def ldi(self):
         '''
         load "immediate", store a value in a register, or "set this register to this value".
@@ -100,8 +109,7 @@ class CPU:
         '''
         while not self.halted:
             instruction = self.ram_read(self.pc)
-            self.reg_a = self.ram_read(self.pc + 1)
-            self.reg_b = self.ram_read(self.pc + 2) 
+            self.register()
             # print(instruction)
             if instruction == HLT:
                 self.hlt()
