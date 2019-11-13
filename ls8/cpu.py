@@ -74,29 +74,6 @@ class CPU:
         Should accept a value to write, and the address to write it to.
         """
         self.ram[reg_a] = reg_b
-
-    def run(self): 
-        print("run")
-
-    # def run(self):
-        # '''
-        # Run the CPU.
-        # '''
-        print("here")
-        # while self.run:
-        #     address = self.ram_read(self.pc)
-        #     print(address, self.pc)
-        #     if address == HLT:
-        #         print("htl")
-        #         break
-        #     elif address == LDI:
-        #         print("ldi")
-        #         self.pc + 1
-        #     elif address == PRN:
-        #         print("prn")
-        #         self.pc += 1
-        #     self.pc += 1
-
     def hlt(self):
         '''
         halt the CPU and exit the emulator.
@@ -113,7 +90,8 @@ class CPU:
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
-        pass
+        print(self.reg[self.pc + 1])
+        self.pc + 2
 
 
 cpu = CPU()
