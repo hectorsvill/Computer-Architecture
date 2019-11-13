@@ -90,6 +90,9 @@ class CPU:
         value = self.reg[reg_a]
         print(value)
     def mul(self):
+        '''
+        Multiply the values in two registers together and store the result in registerA. Machine code:
+        '''
         pass
     def run(self):
         '''
