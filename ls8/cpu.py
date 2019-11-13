@@ -34,8 +34,6 @@ class CPU:
                     val = int(line, 2)
                     self.ram[address] = val
                     address += 1
-                    # print(val)
-            # sys.exit(0)
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -77,16 +75,18 @@ class CPU:
         halt the CPU and exit the emulator.
         '''
         self.halted = True
-    def ldi(self):
+    def ldi(self, reg_a, reg_b):
         '''
         load "immediate", store a value in a register, or "set this register to this value".
         '''
-        pass
-    def prn(self):
+        self.reg[reg_a] = reg_b
+        self.pc += 3
+    def prn(self, reg_a):
         '''
         a pseudo-instruction that prints the numeric value stored in a register.
         '''
-        print(self.reg[self.pc + 1])
+        value = self.reg[reg_a]
+        print(value)
         self.pc + 2
     def run(self):
         '''
@@ -96,14 +96,18 @@ class CPU:
             instruction = self.ram_read(self.pc)
             print(instruction)
             
+            reg_a = self.ram_read(self.pc + 1)
+            reg_b = self.ram_read(self.pc + 2)
+            
             if instruction == HLT:
                 self.hlt()
             elif instruction == LDI:
-                self.ldi()
+                self.ldi(reg_a, reg_b)
             elif instruction == PRN:
-                self.prn()
+                self.prn(reg_a)
+            else:
+                self.pc + 1
 
-            self.pc += 1
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
