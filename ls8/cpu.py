@@ -21,6 +21,9 @@ class CPU:
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
     def create_dispatch_table(self):
+        '''
+        Create a dispatch table for faster access
+        '''
         dispatch_table = {
             LDI: self.ldi,
             PRN: self.prn,
@@ -45,8 +48,6 @@ class CPU:
                     val = int(line, 2)
                     self.ram[address] = val
                     address += 1
-        #             print(val)
-        # sys.exit()
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -124,18 +125,6 @@ class CPU:
             instruction = self.ram_read(self.pc)
             self.register()
             self.dispatch_table[instruction]()
-            # print(self.dispatch_table)
-            # print(instruction)
-            # if instruction == HLT:
-            #     self.hlt()
-            # elif instruction == LDI:
-            #     # self.ldi()
-            # elif instruction == PRN:
-            #     self.prn()
-            # elif instruction == MUL:
-            #     self.mul()
-            # else:
-            #     pass
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
