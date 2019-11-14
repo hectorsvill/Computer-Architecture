@@ -10,6 +10,9 @@ HLT = 0X01 # 1
 MUL = 0XA2 # 162 
 PUSH = 0X45 # 69
 POP =  0X46 #70
+CALL = 0XA7 # 167
+RET = 0X11 #17
+
 
 
 SP = 0XF4 # empty stack address
@@ -22,11 +25,10 @@ class CPU:
         self.halted = False # program is running 
         self.ram = [0] * 256 # ram of 256 bytes
         self.reg = [0] * 8 # register
-
         self.pc = 0 # Program Counter, address of the currently executing instruction
         self.reg_a =  0 #  Memory Address Register, holds the memory address we're reading or writing
         self.reg_b = 0 # Memory Data Register, holds the value to write or the value just read
-        self.ar = 0 # Instruction Register, contains a copy of the currently executing instruction
+        self.ir = 0 # Instruction Register, contains a copy of the currently executing instruction
         self.reg[7] = SP # stack pointer - at address F4, if the stack is empty
     def create_dispatch_table(self):
         '''
@@ -39,6 +41,8 @@ class CPU:
             MUL: self.mul,
             PUSH: self.push,
             POP: self.pop,
+            CALL: self.call,
+            RET: self.ret,
         }
         return dispatch_table
     def load(self):
@@ -150,6 +154,15 @@ class CPU:
         self.reg[7] += 1
         self.reg[self.reg_a] = value
         self.pc += 2
+    def call(self):
+        '''
+        The address of the instruction directly after CALL is pushed onto the stack. This allows us to return to where we left off when the subroutine finishes executing.
+        The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
+        '''
+        self.push()
+        self.pc = self.reg_a
+    def ret(self):
+        pass
     def run(self):
         '''
         run cpu
@@ -157,7 +170,13 @@ class CPU:
         while not self.halted:
             self.ir = self.ram_read(self.pc)
             self.register()
-            self.dispatch_table[self.ir]()
+            print(self.ir)
+            if self.ir in self.dispatch_table:
+                self.dispatch_table[self.ir]()
+            else:
+                print(f"error: did not find instruction in dispatch_table ---> {self.ir}")
+                break
+
 if __name__ == "__main__":
     cpu = CPU()
     cpu.load()
