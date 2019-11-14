@@ -10,7 +10,7 @@ HLT = 0X01 # 1
 MUL = 0XA2 # 162 
 PUSH = 0X45 # 69
 POP =  0X46 #70
-CALL = 0XA7 # 167
+CALL = 0X50# 80
 RET = 0X11 #17
 
 
@@ -151,7 +151,7 @@ class CPU:
         value from the address pointed to by SP to the given register. Increment SP.
         '''
         value = self.ram[self.sp]
-        self.reg[7] += 1
+        self.reg[7] -= 1
         self.reg[self.reg_a] = value
         self.pc += 2
     def call(self):
@@ -159,10 +159,17 @@ class CPU:
         The address of the instruction directly after CALL is pushed onto the stack. This allows us to return to where we left off when the subroutine finishes executing.
         The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
         '''
-        self.push()
-        self.pc = self.reg_a
+        self.reg_a += 2
+        self.reg[7] -= 1
+        self.ram[self.sp] = self.reg_a
+        self.pc = self.sp
     def ret(self):
-        pass
+        '''
+        Return from subroutine.
+        Pop the value from the top of the stack and store it in the PC
+        '''
+        self.pc = self.sp
+        self.reg[7] += 1
     def run(self):
         '''
         run cpu
@@ -170,7 +177,7 @@ class CPU:
         while not self.halted:
             self.ir = self.ram_read(self.pc)
             self.register()
-            print(self.ir)
+            # print(self.ir)
             if self.ir in self.dispatch_table:
                 self.dispatch_table[self.ir]()
             else:
