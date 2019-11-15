@@ -159,9 +159,10 @@ class CPU:
         The address of the instruction directly after CALL is pushed onto the stack. This allows us to return to where we left off when the subroutine finishes executing.
         The PC is set to the address stored in the given register. We jump to that location in RAM and execute the first instruction in the subroutine. The PC can move forward or backwards from its current location.
         '''
+        return_address = self.pc + 2
         self.reg[7] -= 1
-        self.ram[self.sp] = self.pc + 2
-        self.pc = self.sp
+        self.ram[self.sp] = return_address
+        self.pc = self.reg[self.reg_a]
     def ret(self):
         '''
         Return from subroutine.
@@ -179,7 +180,7 @@ class CPU:
         while not self.halted:
             self.ir = self.ram_read(self.pc)
             self.register()
-            print(self.ir)
+            # print(self.ir)
             if self.ir in self.dispatch_table:
                 self.dispatch_table[self.ir]()
             else:
